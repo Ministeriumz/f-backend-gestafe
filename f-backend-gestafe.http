@@ -1,0 +1,6 @@
+@f_backend_gestafe_HostAddress = http://localhost:5290
+
+GET {{f_backend_gestafe_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
