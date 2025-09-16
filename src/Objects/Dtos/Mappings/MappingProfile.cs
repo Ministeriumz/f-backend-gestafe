@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Objects.Models;
+using f_backend_gestafe.src.Objects.Dtos.Entities;
+using f_backend_gestafe.src.Objects.Models;
 
 namespace f_backend_gestafe.Objects.Dtos.Mappings
 {
@@ -10,6 +12,8 @@ namespace f_backend_gestafe.Objects.Dtos.Mappings
         {
             CreateMap<Igreja, IgrejaDTO>().ReverseMap();
             CreateMap<Eventos, EventosDTO>().ReverseMap();
+            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            CreateMap<TipoUsuario, TipoUsuarioDTO>().ReverseMap();
         }
     }
 }
