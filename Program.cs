@@ -33,6 +33,8 @@ builder.Services.AddCors(o => o.AddPolicy("DefaultPolicy", policy =>
 
 builder.Services.AddScoped<IIgrejaRepository, IgrejaRepository>();
 builder.Services.AddScoped<IIgrejaService, IgrejaService>();
+builder.Services.AddScoped<IEventosService,EventosService>();
+builder.Services.AddScoped<IEventosRepository, EventosRepository>();
 
 builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
 builder.Services.AddScoped<ITipoUsuarioService, TipoUsuarioService>();

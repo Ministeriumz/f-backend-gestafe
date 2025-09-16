@@ -41,7 +41,6 @@ namespace f_backend_gestafe.Objects.Models
         [MaxLength(20)]
         [Required]
         public string Numero { get; set; }
-
         public ICollection<Usuario> Usuarios { get; set; }
     }
 }
