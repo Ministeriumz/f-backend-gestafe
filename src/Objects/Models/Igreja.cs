@@ -33,5 +33,7 @@ namespace f_backend_gestafe.Objects.Models
         [Column("numero")]
         [MaxLength(20)]
         public string Numero { get; set; }
+        
+        //falta colocar o id do ministério
     }
 }

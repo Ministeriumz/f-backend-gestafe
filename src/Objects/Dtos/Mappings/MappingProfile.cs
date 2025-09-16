@@ -9,6 +9,7 @@ namespace f_backend_gestafe.Objects.Dtos.Mappings
         public MappingProfile()
         {
             CreateMap<Igreja, IgrejaDTO>().ReverseMap();
+            CreateMap<Eventos, EventosDTO>().ReverseMap();
         }
     }
 }
