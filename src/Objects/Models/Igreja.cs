@@ -1,4 +1,4 @@
-﻿using f_backend_gestafe.src.Objects.Models;
+﻿using f_backend_gestafe.Objects.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -3,8 +3,6 @@ using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using f_backend_gestafe.src.Objects.Dtos.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.ResponseCompression;
 
 namespace f_backend_gestafe.Controllers
 {

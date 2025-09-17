@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace f_backend_gestafe.src.Objects.Models
+namespace f_backend_gestafe.Objects.Models
 {
     [Table("usuario")]
     public class Usuario

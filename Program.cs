@@ -3,10 +3,6 @@ using f_backend_gestafe.Data.Interfaces;
 using f_backend_gestafe.Data.Repositories;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
-using f_backend_gestafe.src.Data.Interfaces;
-using f_backend_gestafe.src.Data.Repositories;
-using f_backend_gestafe.src.Services.Entities;
-using f_backend_gestafe.src.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +29,12 @@ builder.Services.AddCors(o => o.AddPolicy("DefaultPolicy", policy =>
 
 builder.Services.AddScoped<IIgrejaRepository, IgrejaRepository>();
 builder.Services.AddScoped<IIgrejaService, IgrejaService>();
+
 builder.Services.AddScoped<IEventosService,EventosService>();
 builder.Services.AddScoped<IEventosRepository, EventosRepository>();
+
+builder.Services.AddScoped<IMinisterioService,MinisterioService>();
+builder.Services.AddScoped<IMinisterioRepository, MinisterioRepository>();
 
 builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
 builder.Services.AddScoped<ITipoUsuarioService, TipoUsuarioService>();

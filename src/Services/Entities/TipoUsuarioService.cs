@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using f_backend_gestafe.Services.Entities;
-using f_backend_gestafe.src.Data.Interfaces;
-using f_backend_gestafe.src.Objects.Dtos.Entities;
-using f_backend_gestafe.src.Objects.Models;
-using f_backend_gestafe.src.Services.Interfaces;
+using f_backend_gestafe.Data.Interfaces;
+using f_backend_gestafe.Objects.Dtos.Entities;
+using f_backend_gestafe.Objects.Models;
+using f_backend_gestafe.Services.Interfaces;
 
-namespace f_backend_gestafe.src.Services.Entities
+namespace f_backend_gestafe.Services.Entities
 {
     public class TipoUsuarioService : GenericService<TipoUsuario, TipoUsuarioDTO>, ITipoUsuarioService
     {

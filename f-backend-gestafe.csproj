@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>f_backend_gestafe</RootNamespace>
+    <EnableDefaultNamespace>false</EnableDefaultNamespace>
   </PropertyGroup>
 
   <ItemGroup>

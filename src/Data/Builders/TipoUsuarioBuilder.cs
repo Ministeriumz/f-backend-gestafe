@@ -1,8 +1,8 @@
-﻿using f_backend_gestafe.src.Objects.Models;
+﻿using f_backend_gestafe.Objects.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace f_backend_gestafe.src.Data.Builders
+namespace f_backend_gestafe.Data.Builders
 {
     public class TipoUsuarioBuilder
     {

@@ -1,4 +1,4 @@
-﻿namespace f_backend_gestafe.src.Objects.Dtos.Entities
+﻿namespace f_backend_gestafe.Objects.Dtos.Entities
 {
     public class TipoUsuarioDTO
     {

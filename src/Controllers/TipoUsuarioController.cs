@@ -1,8 +1,7 @@
 ﻿using f_backend_gestafe.Objects.Contracts;
 using f_backend_gestafe.Objects.Dtos.Entities;
-using f_backend_gestafe.src.Objects.Dtos.Entities;
-using f_backend_gestafe.src.Services.Entities;
-using f_backend_gestafe.src.Services.Interfaces;
+using f_backend_gestafe.Objects.Dtos.Entities;
+using f_backend_gestafe.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace f_backend_gestafe.Controllers
