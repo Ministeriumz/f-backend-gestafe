@@ -1,6 +1,7 @@
 ﻿using f_backend_gestafe.Objects.Contracts;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.src.Objects.Dtos.Entities;
+using f_backend_gestafe.src.Services.Entities;
 using f_backend_gestafe.src.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -89,6 +90,52 @@ namespace f_backend_gestafe.Controllers
                 _response.Data = new
                 {
                     ErrorMessage = ex.Message,
+                    StackTrace = ex.StackTrace ?? "No stack trace available"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+        }
+
+        [HttpPatch("AtualizarTipoUsuarioPorId{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] TipoUsuarioPatchDTO tipoUsuarioDTO)
+        {
+            if (tipoUsuarioDTO is null)
+            {
+                _response.Code = ResponseEnum.INVALID;
+                _response.Data = null;
+                _response.Message = "Dados inválidos";
+                return BadRequest(_response);
+            }
+
+            try
+            {
+                var existingTipoUsuario = await _tipoUsuarioService.GetById(id);
+                if (existingTipoUsuario is null)
+                {
+                    _response.Code = ResponseEnum.NOT_FOUND;
+                    _response.Data = null;
+                    _response.Message = "Tipo de Usuário não encontrado";
+                    return NotFound(_response);
+                }
+
+                // Atualiza apenas os campos que vierem
+                existingTipoUsuario.Nome = tipoUsuarioDTO.Nome ?? existingTipoUsuario.Nome;
+
+                await _tipoUsuarioService.Update(existingTipoUsuario, id);
+
+                _response.Code = ResponseEnum.SUCCESS;
+                _response.Data = existingTipoUsuario;
+                _response.Message = "Tipo de Usuário atualizado parcialmente com sucesso";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Code = ResponseEnum.ERROR;
+                _response.Message = "Erro ao atualizar o tipo de usuário";
+                _response.Data = new
+                {
+                    ErrorMessage = ex.Message,
+                    InnerErrorMessage = ex.InnerException?.Message ?? "No inner exception",
                     StackTrace = ex.StackTrace ?? "No stack trace available"
                 };
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);

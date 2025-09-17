@@ -95,6 +95,58 @@ namespace f_backend_gestafe.Controllers
             }
         }
 
+        [HttpPatch("AtualizarUsuarioPorId{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] UsuarioPatchDTO usuarioDTO)
+        {
+            if (usuarioDTO is null)
+            {
+                _response.Code = ResponseEnum.INVALID;
+                _response.Data = null;
+                _response.Message = "Dados inválidos";
+                return BadRequest(_response);
+            }
+
+            try
+            {
+                var existingUsuario = await _usuarioService.GetById(id);
+                if (existingUsuario is null)
+                {
+                    _response.Code = ResponseEnum.NOT_FOUND;
+                    _response.Data = null;
+                    _response.Message = "Usuário não encontrado";
+                    return NotFound(_response);
+                }
+
+                // Atualiza apenas os campos que vierem
+                existingUsuario.Nome = usuarioDTO.Nome ?? existingUsuario.Nome;
+                existingUsuario.Sobrenome = usuarioDTO.Sobrenome ?? existingUsuario.Sobrenome;
+                existingUsuario.Telefone = usuarioDTO.Telefone ?? existingUsuario.Telefone;
+                existingUsuario.Email = usuarioDTO.Email ?? existingUsuario.Email; // novo campo
+                existingUsuario.Senha = usuarioDTO.Senha ?? existingUsuario.Senha; // novo campo
+                //existingUsuario.IdIgreja = usuarioDTO.IdIgreja ?? existingUsuario.IdIgreja;
+                //existingUsuario.IdTipoUsuario = usuarioDTO.IdTipoUsuario ?? existingUsuario.IdTipoUsuario;
+
+                await _usuarioService.Update(existingUsuario, id);
+
+                _response.Code = ResponseEnum.SUCCESS;
+                _response.Data = existingUsuario;
+                _response.Message = "Usuário atualizado parcialmente com sucesso";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Code = ResponseEnum.ERROR;
+                _response.Message = "Erro ao atualizar o usuário";
+                _response.Data = new
+                {
+                    ErrorMessage = ex.Message,
+                    InnerErrorMessage = ex.InnerException?.Message ?? "No inner exception",
+                    StackTrace = ex.StackTrace ?? "No stack trace available"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put(UsuarioDTO usuarioDTO)
         {
