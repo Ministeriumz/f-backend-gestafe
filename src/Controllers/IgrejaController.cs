@@ -1,7 +1,8 @@
 ﻿using f_backend_gestafe.Objects.Contracts;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using f_backend_gestafe.src.Objects.Dtos.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace f_backend_gestafe.Controllers
 {
@@ -89,6 +90,52 @@ namespace f_backend_gestafe.Controllers
                 _response.Data = new
                 {
                     ErrorMessage = ex.Message,
+                    StackTrace = ex.StackTrace ?? "No stack trace available"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+        }
+
+        [HttpPatch("AtualizarIgrejaPorId{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] IgrejaPatchDTO igrejaDTO)
+        {
+            if (igrejaDTO is null)
+            {
+                _response.Code = ResponseEnum.INVALID;
+                _response.Data = null;
+                _response.Message = "Dados inválidos";
+                return BadRequest(_response);
+            }
+
+            try
+            {
+                var existingIgreja = await _igrejaService.GetById(id);
+                if (existingIgreja is null)
+                {
+                    _response.Code = ResponseEnum.NOT_FOUND;
+                    _response.Data = null;
+                    _response.Message = "Igreja não encontrada";
+                    return NotFound(_response);
+                }
+
+                // Atualiza apenas os campos que vierem
+                existingIgreja.Nome = igrejaDTO.Nome ?? existingIgreja.Nome;
+
+                await _igrejaService.Update(existingIgreja, id);
+
+                _response.Code = ResponseEnum.SUCCESS;
+                _response.Data = existingIgreja;
+                _response.Message = "Igreja atualizada parcialmente com sucesso";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Code = ResponseEnum.ERROR;
+                _response.Message = "Erro ao atualizar igreja";
+                _response.Data = new
+                {
+                    ErrorMessage = ex.Message,
+                    InnerErrorMessage = ex.InnerException?.Message ?? "No inner exception",
                     StackTrace = ex.StackTrace ?? "No stack trace available"
                 };
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);

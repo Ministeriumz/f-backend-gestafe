@@ -6,5 +6,6 @@ namespace f_backend_gestafe.Services.Interfaces
 {
     public interface IUsuarioService : IGenericService<Usuario, UsuarioDTO>
     {
+
     }
 }
