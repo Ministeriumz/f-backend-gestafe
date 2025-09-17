@@ -1,5 +1,4 @@
-﻿using f_backend_gestafe.Objects.Contracts;
-using f_backend_gestafe.Objects.Dtos.Entities;
+using f_backend_gestafe.Objects.Contracts;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,14 +7,14 @@ namespace f_backend_gestafe.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TipoUsuarioController : Controller
+    public class MinisterioController : Controller
     {
-        private readonly ITipoUsuarioService _tipoUsuarioService;
+        private readonly IMinisterioService _ministerioService;
         private readonly Response _response;
 
-        public TipoUsuarioController(ITipoUsuarioService tipoUsuarioService)
+        public MinisterioController(IMinisterioService ministerioService)
         {
-            _tipoUsuarioService = tipoUsuarioService;
+            _ministerioService = ministerioService;
             _response = new Response();
         }
 
@@ -24,45 +23,46 @@ namespace f_backend_gestafe.Controllers
         {
             try
             {
-                var res = await _tipoUsuarioService.GetAll();
+                var res = await _ministerioService.GetAll();
                 _response.Code = ResponseEnum.SUCCESS;
                 _response.Data = res;
-                _response.Message = "Tipos de usuário listados com sucesso";
+                _response.Message = "Ministerios listados com sucesso";
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao buscar todos os tipos de usuário! {ex.Message}");
+                Console.WriteLine($"Erro ao buscar todos os Ministerios! ${ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
+
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var tipoUsuarioDTO = await _tipoUsuarioService.GetById(id);
+            var contentDTO = await _ministerioService.GetById(id);
 
-            if (tipoUsuarioDTO is null)
+            if (contentDTO is null)
             {
                 _response.Code = ResponseEnum.NOT_FOUND;
-                _response.Data = tipoUsuarioDTO;
-                _response.Message = "Tipo de usuário não encontrado";
+                _response.Data = contentDTO;
+                _response.Message = "Ministerios não sucesso";
 
                 return NotFound(_response);
             }
 
             _response.Code = ResponseEnum.SUCCESS;
-            _response.Data = tipoUsuarioDTO;
-            _response.Message = "Tipo de usuário listado com sucesso";
+            _response.Data = contentDTO;
+            _response.Message = "Ministerio listado com sucesso";
 
             return Ok(_response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(TipoUsuarioDTO tipoUsuarioDTO)
+        public async Task<IActionResult> Post(MinisterioDTO contentDTO)
         {
-            if (tipoUsuarioDTO is null)
+            if (contentDTO is null)
             {
                 _response.Code = ResponseEnum.INVALID;
                 _response.Data = null;
@@ -73,19 +73,19 @@ namespace f_backend_gestafe.Controllers
 
             try
             {
-                tipoUsuarioDTO.Id = 0;
-                await _tipoUsuarioService.Create(tipoUsuarioDTO);
+                contentDTO.Id = 0;
+                await _ministerioService.Create(contentDTO);
 
                 _response.Code = ResponseEnum.SUCCESS;
-                _response.Data = tipoUsuarioDTO;
-                _response.Message = "Tipo de usuário cadastrado com sucesso";
+                _response.Data = contentDTO;
+                _response.Message = "Ministerios cadastrado com sucesso";
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.Code = ResponseEnum.ERROR;
-                _response.Message = "Não foi possível cadastrar o tipo de usuário";
+                _response.Message = "Não foi possível cadastrar o Ministerios";
                 _response.Data = new
                 {
                     ErrorMessage = ex.Message,
@@ -96,10 +96,10 @@ namespace f_backend_gestafe.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(TipoUsuarioDTO tipoUsuarioDTO)
+        public async Task<IActionResult> Put(MinisterioDTO contentDTO)
         {
-            var id = tipoUsuarioDTO.Id;
-            if (tipoUsuarioDTO is null)
+            var id = contentDTO.Id;
+            if (contentDTO is null)
             {
                 _response.Code = ResponseEnum.INVALID;
                 _response.Data = null;
@@ -110,27 +110,27 @@ namespace f_backend_gestafe.Controllers
 
             try
             {
-                var existingTipoUsuarioDTO = await _tipoUsuarioService.GetById(id);
-                if (existingTipoUsuarioDTO is null)
+                var existingAlunoDTO = await _ministerioService.GetById(id);
+                if (existingAlunoDTO is null)
                 {
                     _response.Code = ResponseEnum.NOT_FOUND;
                     _response.Data = null;
-                    _response.Message = "O tipo de usuário informado não existe";
+                    _response.Message = "O Ministerio informado não existe";
                     return NotFound(_response);
                 }
 
-                await _tipoUsuarioService.Update(tipoUsuarioDTO, id);
+                await _ministerioService.Update(contentDTO, id);
 
                 _response.Code = ResponseEnum.SUCCESS;
-                _response.Data = tipoUsuarioDTO;
-                _response.Message = "Tipo de usuário atualizado com sucesso";
+                _response.Data = contentDTO;
+                _response.Message = "Ministerio atualizado com sucesso";
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.Code = ResponseEnum.ERROR;
-                _response.Message = "Ocorreu um erro ao tentar atualizar os dados do tipo de usuário";
+                _response.Message = "Ocorreu um erro ao tentar atualizar os dados do Ministerio";
                 _response.Data = new
                 {
                     ErrorMessage = ex.Message,
@@ -145,27 +145,27 @@ namespace f_backend_gestafe.Controllers
         {
             try
             {
-                var existingTipoUsuarioDTO = await _tipoUsuarioService.GetById(id);
-                if (existingTipoUsuarioDTO is null)
+                var existingAlunoDTO = await _ministerioService.GetById(id);
+                if (existingAlunoDTO is null)
                 {
                     _response.Code = ResponseEnum.NOT_FOUND;
                     _response.Data = null;
-                    _response.Message = "O tipo de usuário informado não existe";
+                    _response.Message = "O Ministerio informado não existe";
                     return NotFound(_response);
                 }
 
-                await _tipoUsuarioService.Remove(id);
+                await _ministerioService.Remove(id);
 
                 _response.Code = ResponseEnum.SUCCESS;
                 _response.Data = null;
-                _response.Message = "Tipo de usuário removido com sucesso";
+                _response.Message = "Ministerio removido com sucesso";
 
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.Code = ResponseEnum.ERROR;
-                _response.Message = "Ocorreu um erro ao tentar remover o tipo de usuário";
+                _response.Message = "Ocorreu um erro ao tentar remover o Ministerio";
                 _response.Data = new
                 {
                     ErrorMessage = ex.Message,

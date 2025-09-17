@@ -10,12 +10,16 @@ namespace f_backend_gestafe.Data
         
         public DbSet<Igreja> Igrejas { get; set; }
         public DbSet<Eventos> Eventos { get; set; }
+        public DbSet<Ministerio> Ministerios { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             IgrejaBuilder.Build(modelBuilder);
             EventosBuilder.Build(modelBuilder);
+            MinisterioBuilder.Build(modelBuilder);
+
         }
     }
 }
