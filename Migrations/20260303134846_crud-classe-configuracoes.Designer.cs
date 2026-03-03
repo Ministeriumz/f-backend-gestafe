@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using f_backend_gestafe.Data;
@@ -11,9 +12,11 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260303134846_crud-classe-configuracoes")]
+    partial class crudclasseconfiguracoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,42 +84,6 @@ namespace f_backend_gestafe.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("eventos");
-                });
-
-            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Acao")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("acao");
-
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("data");
-
-                    b.Property<int?>("IgrejaId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("numeric")
-                        .HasColumnName("valor");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IgrejaId");
-
-                    b.ToTable("financeiro");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
@@ -276,11 +243,6 @@ namespace f_backend_gestafe.Migrations
                         .HasForeignKey("f_backend_gestafe.Objects.Models.Configuracoes", "IgrejaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
-                {
-                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
-                        .WithMany("Financeiros")
-                        .HasForeignKey("IgrejaId");
 
                     b.Navigation("Igreja");
                 });
@@ -308,7 +270,6 @@ namespace f_backend_gestafe.Migrations
                 {
                     b.Navigation("Configuracoes")
                         .IsRequired();
-                    b.Navigation("Financeiros");
 
                     b.Navigation("Usuarios");
                 });
