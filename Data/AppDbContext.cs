@@ -11,6 +11,10 @@ namespace f_backend_gestafe.Data
         public DbSet<Igreja> Igrejas { get; set; }
         public DbSet<Eventos> Eventos { get; set; }
         public DbSet<Ministerio> Ministerios { get; set; }
+        public DbSet<TipoUsuario> TipoUsuario { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Configuracoes> Configuracoes { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,6 +23,9 @@ namespace f_backend_gestafe.Data
             IgrejaBuilder.Build(modelBuilder);
             EventosBuilder.Build(modelBuilder);
             MinisterioBuilder.Build(modelBuilder);
+            UsuarioBuilder.Build(modelBuilder);
+            TipoUsuarioBuilder.Build(modelBuilder);
+            ConfiguracoesBuilder.Build(modelBuilder);
 
         }
     }

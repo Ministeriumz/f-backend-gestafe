@@ -42,6 +42,9 @@ builder.Services.AddScoped<ITipoUsuarioService, TipoUsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
+builder.Services.AddScoped<IConfiguracoesRepository, ConfiguracoesRepository>();
+builder.Services.AddScoped<IConfiguracoesService, ConfiguracoesService>();
+
 // Build app
 var app = builder.Build();
 

@@ -14,6 +14,7 @@ namespace f_backend_gestafe.Data.Builders
             modelBuilder.Entity<Igreja>().Property(i => i.Rua).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<Igreja>().Property(i => i.Cep).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<Igreja>().Property(i => i.Numero).IsRequired().HasMaxLength(20);
+            modelBuilder.Entity<Igreja>().HasOne(i => i.Configuracoes).WithOne(c => c.Igreja).HasForeignKey<Configuracoes>(c => c.IgrejaId);
         }
     }
 }
