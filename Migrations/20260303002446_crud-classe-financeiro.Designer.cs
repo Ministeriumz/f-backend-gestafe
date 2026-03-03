@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using f_backend_gestafe.Data;
@@ -11,9 +12,11 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260303002446_crud-classe-financeiro")]
+    partial class crudclassefinanceiro
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,22 +24,6 @@ namespace f_backend_gestafe.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
-                {
-                    b.Property<int>("IgrejaId")
-                        .HasColumnType("integer")
-                        .HasColumnName("igreja_id");
-
-                    b.Property<string>("ConfiguracaoJson")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("configuracoes");
-
-                    b.HasKey("IgrejaId");
-
-                    b.ToTable("configuracoes");
-                });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Eventos", b =>
                 {
@@ -269,13 +256,6 @@ namespace f_backend_gestafe.Migrations
                     b.ToTable("usuario");
                 });
 
-            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
-                {
-                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
-                        .WithOne("Configuracoes")
-                        .HasForeignKey("f_backend_gestafe.Objects.Models.Configuracoes", "IgrejaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
@@ -306,8 +286,6 @@ namespace f_backend_gestafe.Migrations
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
                 {
-                    b.Navigation("Configuracoes")
-                        .IsRequired();
                     b.Navigation("Financeiros");
 
                     b.Navigation("Usuarios");

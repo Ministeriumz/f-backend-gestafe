@@ -14,6 +14,7 @@ namespace f_backend_gestafe.Objects.Dtos.Mappings
             CreateMap<TipoUsuario, TipoUsuarioDTO>().ReverseMap();
             CreateMap<Ministerio, MinisterioDTO>().ReverseMap();
             CreateMap<Configuracoes, ConfiguracoesDTO>().ReverseMap();
+            CreateMap<Financeiro, FinanceiroDTO>().ReverseMap();
         }
     }
 }
