@@ -1,6 +1,7 @@
 using f_backend_gestafe.Data;
 using f_backend_gestafe.Data.Interfaces;
 using f_backend_gestafe.Data.Repositories;
+using f_backend_gestafe.Middles;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -44,8 +45,12 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddScoped<IConfiguracoesRepository, ConfiguracoesRepository>();
 builder.Services.AddScoped<IConfiguracoesService, ConfiguracoesService>();
+
 builder.Services.AddScoped<IFinanceiroRepository, FinanceiroRepository>();
 builder.Services.AddScoped<IFinanceiroService, FinanceiroService>();
+
+builder.Services.AddScoped<ILogRepository, LogRepository>();
+builder.Services.AddScoped<ILogService, LogService>();
 
 // Build app
 var app = builder.Build();
@@ -70,7 +75,9 @@ app.UseCors("DefaultPolicy");
 app.UseAuthorization();
 
 // Controllers
-app.MapControllers();
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<LogMiddleware>();
+app.MapControllers();
+
 
 app.Run();

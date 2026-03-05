@@ -169,6 +169,38 @@ namespace f_backend_gestafe.Migrations
                     b.ToTable("igreja");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("acao");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data");
+
+                    b.Property<TimeSpan>("Hora")
+                        .HasColumnType("interval")
+                        .HasColumnName("hora");
+
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_usuario");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("logs");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Ministerio", b =>
                 {
                     b.Property<int>("Id")
@@ -276,49 +308,53 @@ namespace f_backend_gestafe.Migrations
                         .HasForeignKey("f_backend_gestafe.Objects.Models.Configuracoes", "IgrejaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                    modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
-                        {
-                            b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
-                                .WithMany("Financeiros")
-                                .HasForeignKey("IgrejaId");
 
-                            b.Navigation("Igreja");
-                        });
-
-                    modelBuilder.Entity("f_backend_gestafe.Objects.Models.Usuario", b =>
-                        {
-                            b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
-                                .WithMany("Usuarios")
-                                .HasForeignKey("IdIgreja")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-
-                            b.HasOne("f_backend_gestafe.Objects.Models.TipoUsuario", "TipoUsuario")
-                                .WithMany("Usuarios")
-                                .HasForeignKey("IdTipoUsuario")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-
-                            b.Navigation("Igreja");
-
-                            b.Navigation("TipoUsuario");
-                        });
-
-                    modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
-                        {
-                            b.Navigation("Configuracoes")
-                                .IsRequired();
-                            b.Navigation("Financeiros");
-
-                            b.Navigation("Usuarios");
-                        });
-
-                    modelBuilder.Entity("f_backend_gestafe.Objects.Models.TipoUsuario", b =>
-                        {
-                            b.Navigation("Usuarios");
-                        });
-#pragma warning restore 612, 618
+                    b.Navigation("Igreja");
                 });
-    }
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
+                        .WithMany("Financeiros")
+                        .HasForeignKey("IgrejaId");
+
+                    b.Navigation("Igreja");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Usuario", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("IdIgreja")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("f_backend_gestafe.Objects.Models.TipoUsuario", "TipoUsuario")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("IdTipoUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Igreja");
+
+                    b.Navigation("TipoUsuario");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
+                {
+                    b.Navigation("Configuracoes")
+                        .IsRequired();
+
+                    b.Navigation("Financeiros");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.TipoUsuario", b =>
+                {
+                    b.Navigation("Usuarios");
+                });
+#pragma warning restore 612, 618
+        }
     }
 }

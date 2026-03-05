@@ -12,8 +12,8 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250917004201_MinisterioCorrecao")]
-    partial class MinisterioCorrecao
+    [Migration("20260305140524_inicial")]
+    partial class inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,22 @@ namespace f_backend_gestafe.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
+                {
+                    b.Property<int>("IgrejaId")
+                        .HasColumnType("integer")
+                        .HasColumnName("igreja_id");
+
+                    b.Property<string>("ConfiguracaoJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("configuracoes");
+
+                    b.HasKey("IgrejaId");
+
+                    b.ToTable("configuracoes");
+                });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Eventos", b =>
                 {
@@ -68,6 +84,42 @@ namespace f_backend_gestafe.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("eventos");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("acao");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data");
+
+                    b.Property<int?>("IgrejaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("numeric")
+                        .HasColumnName("valor");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IgrejaId");
+
+                    b.ToTable("financeiro");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
@@ -118,6 +170,38 @@ namespace f_backend_gestafe.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("igreja");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("acao");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data");
+
+                    b.Property<TimeSpan>("Hora")
+                        .HasColumnType("interval")
+                        .HasColumnName("hora");
+
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_usuario");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("logs");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Ministerio", b =>
@@ -220,6 +304,26 @@ namespace f_backend_gestafe.Migrations
                     b.ToTable("usuario");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
+                        .WithOne("Configuracoes")
+                        .HasForeignKey("f_backend_gestafe.Objects.Models.Configuracoes", "IgrejaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Igreja");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
+                        .WithMany("Financeiros")
+                        .HasForeignKey("IgrejaId");
+
+                    b.Navigation("Igreja");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Usuario", b =>
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
@@ -241,6 +345,11 @@ namespace f_backend_gestafe.Migrations
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
                 {
+                    b.Navigation("Configuracoes")
+                        .IsRequired();
+
+                    b.Navigation("Financeiros");
+
                     b.Navigation("Usuarios");
                 });
 
