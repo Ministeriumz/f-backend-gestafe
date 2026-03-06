@@ -14,6 +14,7 @@ namespace f_backend_gestafe.Data
         public DbSet<TipoUsuario> TipoUsuario { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Configuracoes> Configuracoes { get; set; }
+        public DbSet<Log> Log { get; set; }
 
 
 
@@ -26,6 +27,7 @@ namespace f_backend_gestafe.Data
             UsuarioBuilder.Build(modelBuilder);
             TipoUsuarioBuilder.Build(modelBuilder);
             ConfiguracoesBuilder.Build(modelBuilder);
+            LogBuilder.Build(modelBuilder);
 
         }
     }
