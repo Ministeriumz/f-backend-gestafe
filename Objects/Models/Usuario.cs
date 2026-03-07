@@ -50,5 +50,7 @@ namespace f_backend_gestafe.Objects.Models
 
         [ForeignKey("IdTipoUsuario")]
         public TipoUsuario TipoUsuario { get; set; }
+
+        public ICollection<CargosUsuario> CargosUsuario { get; set; }
     }
 }

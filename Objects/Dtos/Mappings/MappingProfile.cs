@@ -16,6 +16,8 @@ namespace f_backend_gestafe.Objects.Dtos.Mappings
             CreateMap<Configuracoes, ConfiguracoesDTO>().ReverseMap();
             CreateMap<Financeiro, FinanceiroDTO>().ReverseMap();
             CreateMap<Log, LogDTO>().ReverseMap();
+            CreateMap<Cargo, CargosDTO>().ReverseMap();
+            CreateMap<CargosUsuario, CargosUsuarioDTO>().ReverseMap();
         }
     }
 }

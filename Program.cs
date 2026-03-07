@@ -52,6 +52,12 @@ builder.Services.AddScoped<IFinanceiroService, FinanceiroService>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
 
+builder.Services.AddScoped<ICargosRepository, CargosRepository>();
+builder.Services.AddScoped<ICargosService, CargosService>();
+
+builder.Services.AddScoped<ICargosUsuarioRepository, CargosUsuarioRepository>();
+builder.Services.AddScoped<ICargosUsuarioService, CargosUsuarioService>();
+
 // Build app
 var app = builder.Build();
 
