@@ -1,9 +1,6 @@
-﻿using f_backend_gestafe.Data;
-using f_backend_gestafe.Data.Interfaces;
-using f_backend_gestafe.Data.Repositories;
-using f_backend_gestafe.Data.Interfaces;
+﻿using f_backend_gestafe.Data.Interfaces;
 using f_backend_gestafe.Objects.Models;
-using f_backend_gestafe.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace f_backend_gestafe.Data.Repositories
 {
@@ -14,6 +11,11 @@ namespace f_backend_gestafe.Data.Repositories
         public UsuarioRepository(AppDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<Usuario?> GetByEmailAndSenha(string email, string senha)
+        {
+            return await _context.Usuario.FirstOrDefaultAsync(u => u.Email == email && u.Senha == senha);
         }
     }
 }
