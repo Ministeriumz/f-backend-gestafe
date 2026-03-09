@@ -75,6 +75,37 @@ namespace f_backend_gestafe.Migrations
                     b.ToTable("configuracoes");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Escala", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CargoId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("Data")
+                        .HasColumnType("date")
+                        .HasColumnName("data");
+
+                    b.Property<TimeOnly>("HoraFim")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("hora_fim");
+
+                    b.Property<TimeOnly>("HoraInicio")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("hora_inicio");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CargoId");
+
+                    b.ToTable("escala");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Eventos", b =>
                 {
                     b.Property<int>("Id")
@@ -368,6 +399,17 @@ namespace f_backend_gestafe.Migrations
                     b.Navigation("Igreja");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Escala", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Cargo", "Cargo")
+                        .WithMany("Escalas")
+                        .HasForeignKey("CargoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cargo");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
@@ -399,6 +441,8 @@ namespace f_backend_gestafe.Migrations
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Cargo", b =>
                 {
                     b.Navigation("CargosUsuario");
+
+                    b.Navigation("Escalas");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>

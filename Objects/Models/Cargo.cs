@@ -17,4 +17,5 @@ public class Cargo
     public string Nome { get; set; }
 
     public ICollection<CargosUsuario> CargosUsuario { get; set; }
+    public ICollection<Escala> Escalas { get; set; }
 }

@@ -7,11 +7,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace f_backend_gestafe.Migrations
 {
     /// <inheritdoc />
-    public partial class inicial : Migration
+    public partial class crudclasseescala : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "cargo",
+                columns: table => new
+                {
+                    id_cargo = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cargo", x => x.id_cargo);
+                });
+
             migrationBuilder.CreateTable(
                 name: "eventos",
                 columns: table => new
@@ -92,6 +105,28 @@ namespace f_backend_gestafe.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "escala",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    data = table.Column<DateOnly>(type: "date", nullable: false),
+                    hora_inicio = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    hora_fim = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    CargoId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_escala", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_escala_cargo_CargoId",
+                        column: x => x.CargoId,
+                        principalTable: "cargo",
+                        principalColumn: "id_cargo",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "configuracoes",
                 columns: table => new
                 {
@@ -162,6 +197,40 @@ namespace f_backend_gestafe.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "cargos_usuario",
+                columns: table => new
+                {
+                    IdUsuario = table.Column<int>(type: "integer", nullable: false),
+                    IdCargo = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cargos_usuario", x => new { x.IdUsuario, x.IdCargo });
+                    table.ForeignKey(
+                        name: "FK_cargos_usuario_cargo_IdCargo",
+                        column: x => x.IdCargo,
+                        principalTable: "cargo",
+                        principalColumn: "id_cargo",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cargos_usuario_usuario_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "usuario",
+                        principalColumn: "id_usuario",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cargos_usuario_IdCargo",
+                table: "cargos_usuario",
+                column: "IdCargo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_escala_CargoId",
+                table: "escala",
+                column: "CargoId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_financeiro_IgrejaId",
                 table: "financeiro",
@@ -182,7 +251,13 @@ namespace f_backend_gestafe.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "cargos_usuario");
+
+            migrationBuilder.DropTable(
                 name: "configuracoes");
+
+            migrationBuilder.DropTable(
+                name: "escala");
 
             migrationBuilder.DropTable(
                 name: "eventos");
@@ -198,6 +273,9 @@ namespace f_backend_gestafe.Migrations
 
             migrationBuilder.DropTable(
                 name: "usuario");
+
+            migrationBuilder.DropTable(
+                name: "cargo");
 
             migrationBuilder.DropTable(
                 name: "igreja");

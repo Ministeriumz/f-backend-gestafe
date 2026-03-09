@@ -17,6 +17,7 @@ namespace f_backend_gestafe.Data
         public DbSet<Log> Log { get; set; }
         public DbSet<Cargo> Cargo { get; set; }
         public DbSet<CargosUsuario> CargosUsuarios { get; set; }
+        public DbSet<Escala> Escala { get; set; }
 
 
 
@@ -32,6 +33,7 @@ namespace f_backend_gestafe.Data
             LogBuilder.Build(modelBuilder);
             CargosBuilder.Build(modelBuilder);
             CargosUsuarioBuilder.Build(modelBuilder);
+            EscalaBuilder.Build(modelBuilder);
 
         }
     }
