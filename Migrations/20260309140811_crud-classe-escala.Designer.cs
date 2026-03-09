@@ -12,8 +12,8 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260305140524_inicial")]
-    partial class inicial
+    [Migration("20260309140811_crud-classe-escala")]
+    partial class crudclasseescala
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,43 @@ namespace f_backend_gestafe.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Cargo", b =>
+                {
+                    b.Property<int>("IdCargo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_cargo");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCargo"));
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("nome");
+
+                    b.HasKey("IdCargo");
+
+                    b.ToTable("cargo");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.CargosUsuario", b =>
+                {
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("IdCargo")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("IdUsuario", "IdCargo");
+
+                    b.HasIndex("IdCargo");
+
+                    b.ToTable("cargos_usuario");
+                });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
                 {
@@ -39,6 +76,37 @@ namespace f_backend_gestafe.Migrations
                     b.HasKey("IgrejaId");
 
                     b.ToTable("configuracoes");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Escala", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CargoId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("Data")
+                        .HasColumnType("date")
+                        .HasColumnName("data");
+
+                    b.Property<TimeOnly>("HoraFim")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("hora_fim");
+
+                    b.Property<TimeOnly>("HoraInicio")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("hora_inicio");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CargoId");
+
+                    b.ToTable("escala");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Eventos", b =>
@@ -304,6 +372,25 @@ namespace f_backend_gestafe.Migrations
                     b.ToTable("usuario");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.CargosUsuario", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Cargo", "Cargo")
+                        .WithMany("CargosUsuario")
+                        .HasForeignKey("IdCargo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("f_backend_gestafe.Objects.Models.Usuario", "Usuario")
+                        .WithMany("CargosUsuario")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cargo");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Configuracoes", b =>
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
@@ -313,6 +400,17 @@ namespace f_backend_gestafe.Migrations
                         .IsRequired();
 
                     b.Navigation("Igreja");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Escala", b =>
+                {
+                    b.HasOne("f_backend_gestafe.Objects.Models.Cargo", "Cargo")
+                        .WithMany("Escalas")
+                        .HasForeignKey("CargoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cargo");
                 });
 
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Financeiro", b =>
@@ -343,6 +441,13 @@ namespace f_backend_gestafe.Migrations
                     b.Navigation("TipoUsuario");
                 });
 
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Cargo", b =>
+                {
+                    b.Navigation("CargosUsuario");
+
+                    b.Navigation("Escalas");
+                });
+
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.Igreja", b =>
                 {
                     b.Navigation("Configuracoes")
@@ -356,6 +461,11 @@ namespace f_backend_gestafe.Migrations
             modelBuilder.Entity("f_backend_gestafe.Objects.Models.TipoUsuario", b =>
                 {
                     b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("f_backend_gestafe.Objects.Models.Usuario", b =>
+                {
+                    b.Navigation("CargosUsuario");
                 });
 #pragma warning restore 612, 618
         }

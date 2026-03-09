@@ -58,6 +58,9 @@ builder.Services.AddScoped<ICargosService, CargosService>();
 builder.Services.AddScoped<ICargosUsuarioRepository, CargosUsuarioRepository>();
 builder.Services.AddScoped<ICargosUsuarioService, CargosUsuarioService>();
 
+builder.Services.AddScoped<IEscalaRepository, EscalaRepository>();
+builder.Services.AddScoped<IEscalaService, EscalaService>();
+
 // Build app
 var app = builder.Build();
 
