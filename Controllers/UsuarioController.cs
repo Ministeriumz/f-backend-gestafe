@@ -4,6 +4,7 @@ using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace f_backend_gestafe.Controllers
 {
@@ -52,6 +53,7 @@ namespace f_backend_gestafe.Controllers
             return Ok(_response);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post(UsuarioDTO usuarioDTO)
         {

@@ -12,8 +12,8 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260309140811_crud-classe-escala")]
-    partial class crudclasseescala
+    [Migration("20260530193057_teste")]
+    partial class teste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
