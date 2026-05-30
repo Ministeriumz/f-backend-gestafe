@@ -2,6 +2,7 @@
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
+using f_backend_gestafe.Services.Security;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -67,6 +68,7 @@ namespace f_backend_gestafe.Controllers
             }
 
             usuarioDTO.Id = 0;
+            usuarioDTO.Senha = PasswordHasher.Hash(usuarioDTO.Senha);
             await _usuarioService.Create(usuarioDTO);
 
             _response.Code = ResponseEnum.SUCCESS;
@@ -101,7 +103,10 @@ namespace f_backend_gestafe.Controllers
             existingUsuario.Sobrenome = usuarioDTO.Sobrenome ?? existingUsuario.Sobrenome;
             existingUsuario.Telefone = usuarioDTO.Telefone ?? existingUsuario.Telefone;
             existingUsuario.Email = usuarioDTO.Email ?? existingUsuario.Email; // novo campo
-            existingUsuario.Senha = usuarioDTO.Senha ?? existingUsuario.Senha; // novo campo
+            if (!string.IsNullOrWhiteSpace(usuarioDTO.Senha))
+            {
+                existingUsuario.Senha = PasswordHasher.Hash(usuarioDTO.Senha);
+            }
             //existingUsuario.IdIgreja = usuarioDTO.IdIgreja ?? existingUsuario.IdIgreja;
             //existingUsuario.IdTipoUsuario = usuarioDTO.IdTipoUsuario ?? existingUsuario.IdTipoUsuario;
 
@@ -133,6 +138,11 @@ namespace f_backend_gestafe.Controllers
                 _response.Data = null;
                 _response.Message = "O usuário informado não existe";
                 return NotFound(_response);
+            }
+
+            if (!string.IsNullOrWhiteSpace(usuarioDTO.Senha))
+            {
+                usuarioDTO.Senha = PasswordHasher.Hash(usuarioDTO.Senha);
             }
 
             await _usuarioService.Update(usuarioDTO, id);

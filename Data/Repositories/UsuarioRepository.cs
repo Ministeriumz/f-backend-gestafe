@@ -13,9 +13,9 @@ namespace f_backend_gestafe.Data.Repositories
             _context = context;
         }
 
-        public async Task<Usuario?> GetByEmailAndSenha(string email, string senha)
+        public async Task<Usuario?> GetByEmail(string email)
         {
-            return await _context.Usuario.FirstOrDefaultAsync(u => u.Email == email && u.Senha == senha);
+            return await _context.Usuario.FirstOrDefaultAsync(u => u.Email == email);
         }
     }
 }

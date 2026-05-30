@@ -35,7 +35,7 @@ namespace f_backend_gestafe.Objects.Models
 
         [Required]
         [Column("senha")]
-        [MaxLength(50)]
+        [MaxLength(255)]
         public string Senha { get; set; }
 
         // Chaves estrangeiras

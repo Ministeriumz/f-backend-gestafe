@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using f_backend_gestafe.Services.Security;
 
 namespace f_backend_gestafe.Controllers
 {
@@ -41,9 +42,9 @@ namespace f_backend_gestafe.Controllers
                 return BadRequest(_response);
             }
 
-            var usuario = await _usuarioRepository.GetByEmailAndSenha(request.Email, request.Senha);
+            var usuario = await _usuarioRepository.GetByEmail(request.Email);
 
-            if (usuario is null)
+            if (usuario is null || !PasswordHasher.Verify(request.Senha, usuario.Senha))
             {
                 _response.Code = ResponseEnum.UNAUTHORIZED;
                 _response.Message = "E-mail ou senha inválidos";

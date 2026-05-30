@@ -28,7 +28,7 @@ namespace f_backend_gestafe.Data.Builders
 
             modelBuilder.Entity<Usuario>().Property(u => u.Senha)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(255);
 
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Igreja)

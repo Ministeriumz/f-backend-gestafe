@@ -4,6 +4,6 @@ namespace f_backend_gestafe.Data.Interfaces
 {
     public interface IUsuarioRepository : IGenericRepository<Usuario>
     {
-        Task<Usuario?> GetByEmailAndSenha(string email, string senha);
+        Task<Usuario?> GetByEmail(string email);
     }
 }
