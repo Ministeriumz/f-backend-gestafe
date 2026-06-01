@@ -2,7 +2,7 @@
 using f_backend_gestafe.Services.Interfaces;
 using System.Security.Claims;
 
-namespace f_backend_gestafe.Middles;
+namespace f_backend_gestafe.Middleware;
 
 public class LogMiddleware
 {

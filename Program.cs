@@ -1,7 +1,7 @@
 using f_backend_gestafe.Data;
 using f_backend_gestafe.Data.Interfaces;
 using f_backend_gestafe.Data.Repositories;
-using f_backend_gestafe.Middles;
+using f_backend_gestafe.Middleware;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -145,7 +145,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Controllers
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<LogMiddleware>();
 app.MapControllers();
 
