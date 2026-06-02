@@ -12,8 +12,8 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260530193057_teste")]
-    partial class teste
+    [Migration("20260602022009_migration-atualizada-010626")]
+    partial class migrationatualizada010626
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -347,8 +347,8 @@ namespace f_backend_gestafe.Migrations
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("senha");
 
                     b.Property<string>("Sobrenome")

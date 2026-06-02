@@ -27,7 +27,7 @@ namespace f_backend_gestafe.Services.Entities
             return _mapper.Map<TDto>(entity);
         }
 
-        public async Task Create(TDto entityDTO)
+        public virtual async Task Create(TDto entityDTO)
         {
             var entity = _mapper.Map<T>(entityDTO);
             await _repository.Add(entity);

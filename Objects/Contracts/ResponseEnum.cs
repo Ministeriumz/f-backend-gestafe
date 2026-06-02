@@ -2,11 +2,11 @@
 {
     public enum ResponseEnum
     {
-        SUCCESS = 1,
-        INVALID = 2,
-        NOT_FOUND = 3,
-        CONFLICT = 4,
-        UNAUTHORIZED = 5,
-        ERROR = 6
+        SUCCESS = 200,
+        INVALID = 400,
+        NOT_FOUND = 404,
+        CONFLICT = 409,
+        UNAUTHORIZED = 401,
+        ERROR = 500
     }
 }

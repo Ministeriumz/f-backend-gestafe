@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace f_backend_gestafe.Migrations
 {
     /// <inheritdoc />
-    public partial class teste : Migration
+    public partial class migrationatualizada010626 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -176,7 +176,7 @@ namespace f_backend_gestafe.Migrations
                     sobrenome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     telefone = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    senha = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    senha = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     id_igreja = table.Column<int>(type: "integer", nullable: false),
                     id_tipo = table.Column<int>(type: "integer", nullable: false)
                 },
