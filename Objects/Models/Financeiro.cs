@@ -29,7 +29,7 @@ namespace f_backend_gestafe.Objects.Models
         public StatusFinanceiro Status { get; set; }
 
         [ForeignKey("IgrejaId")]
-        public int? IgrejaId { get; set; }
+        public int IgrejaId { get; set; }
         public Igreja Igreja { get; set; }
 
     }

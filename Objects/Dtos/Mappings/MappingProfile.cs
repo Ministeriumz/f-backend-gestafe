@@ -11,6 +11,7 @@ namespace f_backend_gestafe.Objects.Dtos.Mappings
             CreateMap<Igreja, IgrejaDTO>().ReverseMap();
             CreateMap<Eventos, EventosDTO>().ReverseMap();
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            CreateMap<UsuarioDTO, UsuarioResponseDTO>().ReverseMap();
             CreateMap<TipoUsuario, TipoUsuarioDTO>().ReverseMap();
             CreateMap<Ministerio, MinisterioDTO>().ReverseMap();
             CreateMap<Configuracoes, ConfiguracoesDTO>().ReverseMap();

@@ -7,5 +7,7 @@ namespace f_backend_gestafe.Services.Interfaces
     {
         Task<CargosUsuarioDTO> GetByCompositeId(int usuarioId, int cargoId);
         Task RemoveComposite(int usuarioId, int cargoId);
+
+
     }
 }

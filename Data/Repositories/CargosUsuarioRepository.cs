@@ -28,5 +28,11 @@ namespace f_backend_gestafe.Data.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<CargosUsuario> GetByUsuarioECargoAsync(int idUsuario, int idCargo)
+        {
+            return await _context.Set<CargosUsuario>()
+                .FirstOrDefaultAsync(cu => cu.IdUsuario == idUsuario && cu.IdCargo == idCargo);
+        }
     }
 }

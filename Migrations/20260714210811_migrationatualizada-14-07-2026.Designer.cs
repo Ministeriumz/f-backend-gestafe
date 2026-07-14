@@ -12,8 +12,8 @@ using f_backend_gestafe.Data;
 namespace f_backend_gestafe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260602022009_migration-atualizada-010626")]
-    partial class migrationatualizada010626
+    [Migration("20260714210811_migrationatualizada-14-07-2026")]
+    partial class migrationatualizada14072026
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace f_backend_gestafe.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("data");
 
-                    b.Property<int?>("IgrejaId")
+                    b.Property<int>("IgrejaId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -417,7 +417,9 @@ namespace f_backend_gestafe.Migrations
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
                         .WithMany("Financeiros")
-                        .HasForeignKey("IgrejaId");
+                        .HasForeignKey("IgrejaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Igreja");
                 });

@@ -169,7 +169,7 @@ namespace f_backend_gestafe.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("data");
 
-                    b.Property<int?>("IgrejaId")
+                    b.Property<int>("IgrejaId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -414,7 +414,9 @@ namespace f_backend_gestafe.Migrations
                 {
                     b.HasOne("f_backend_gestafe.Objects.Models.Igreja", "Igreja")
                         .WithMany("Financeiros")
-                        .HasForeignKey("IgrejaId");
+                        .HasForeignKey("IgrejaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Igreja");
                 });

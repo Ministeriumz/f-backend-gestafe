@@ -1,11 +1,10 @@
-﻿using f_backend_gestafe.Objects.Contracts;
-using f_backend_gestafe.Objects.Dtos.Entities;
+﻿using AutoMapper;
+using f_backend_gestafe.Objects.Contracts;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using f_backend_gestafe.Services.Security;
-using f_backend_gestafe.Objects.Dtos.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace f_backend_gestafe.Controllers
 {
@@ -14,11 +13,13 @@ namespace f_backend_gestafe.Controllers
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IMapper _mapper; // Adicionando o campo do AutoMapper
         private readonly Response _response;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IMapper mapper) // Injetando aqui
         {
             _usuarioService = usuarioService;
+            _mapper = mapper; // Atribuindo aqui
             _response = new Response();
         }
 
@@ -68,11 +69,12 @@ namespace f_backend_gestafe.Controllers
             }
 
             usuarioDTO.Id = 0;
-            usuarioDTO.Senha = PasswordHasher.Hash(usuarioDTO.Senha);
             await _usuarioService.Create(usuarioDTO);
 
+            var responseDTO = _mapper.Map<UsuarioResponseDTO>(usuarioDTO);
+
             _response.Code = ResponseEnum.SUCCESS;
-            _response.Data = usuarioDTO;
+            _response.Data = responseDTO;
             _response.Message = "Usuário cadastrado com sucesso";
 
             return Ok(_response);

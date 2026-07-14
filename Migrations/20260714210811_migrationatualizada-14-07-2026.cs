@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace f_backend_gestafe.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationatualizada010626 : Migration
+    public partial class migrationatualizada14072026 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -154,7 +154,7 @@ namespace f_backend_gestafe.Migrations
                     acao = table.Column<string>(type: "text", nullable: false),
                     data = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
-                    IgrejaId = table.Column<int>(type: "integer", nullable: true)
+                    IgrejaId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,7 +163,8 @@ namespace f_backend_gestafe.Migrations
                         name: "FK_financeiro_igreja_IgrejaId",
                         column: x => x.IgrejaId,
                         principalTable: "igreja",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
