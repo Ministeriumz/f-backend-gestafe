@@ -1,5 +1,7 @@
 ﻿using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Services.Interfaces;
+using f_backend_gestafe.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
 namespace f_backend_gestafe.Middleware;
@@ -13,7 +15,7 @@ public class LogMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, ILogService logService)
+    public async Task Invoke(HttpContext context, ILogService logService, IHubContext<LogHub> hubContext)
     {
         // Executa o endpoint primeiro
         await _next(context);
@@ -43,11 +45,11 @@ public class LogMiddleware
             };
 
             await logService.Create(log);
+            await hubContext.Clients.All.SendAsync("ReceberLog", log);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
-            // Se falhar o log, não quebra a API
-            Console.WriteLine(ex.Message);
+            Console.WriteLine($"Erro no LogMiddleware: {ex.Message}");
         }
     }
 }

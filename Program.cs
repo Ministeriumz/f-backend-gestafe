@@ -4,6 +4,7 @@ using f_backend_gestafe.Data.Repositories;
 using f_backend_gestafe.Middleware;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
+using f_backend_gestafe.Hubs; // <-- IMPORTANTE: Namespace onde você vai criar a classe LogHub
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// 1. ADICIONADO: Registrar os serviços do SignalR no container
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
@@ -71,6 +75,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             ClockSkew = TimeSpan.Zero
         };
+
+        // --- ADICIONE ESTE BLOCO DE EVENTOS ABAIXO ---
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+
+                // Se o token vier na URL e for direcionado ao nosso hub do SignalR
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/loghub"))
+                {
+                    // Força o ASP.NET a ler o token que o SignalR enviou
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
+        // --------------------------------------------
     });
 
 builder.Services.AddAuthorization(options =>
@@ -80,21 +103,23 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
+// Mantivemos sua política com suporte a credenciais e as portas de Dev
 builder.Services.AddCors(o => o.AddPolicy("DefaultPolicy", policy =>
 {
-    policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+    policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5500")
           .AllowAnyMethod()
           .AllowAnyHeader()
           .AllowCredentials();
 }));
 
+// Injeções de Dependência de Repositories e Services
 builder.Services.AddScoped<IIgrejaRepository, IgrejaRepository>();
 builder.Services.AddScoped<IIgrejaService, IgrejaService>();
 
-builder.Services.AddScoped<IEventosService,EventosService>();
+builder.Services.AddScoped<IEventosService, EventosService>();
 builder.Services.AddScoped<IEventosRepository, EventosRepository>();
 
-builder.Services.AddScoped<IMinisterioService,MinisterioService>();
+builder.Services.AddScoped<IMinisterioService, MinisterioService>();
 builder.Services.AddScoped<IMinisterioRepository, MinisterioRepository>();
 
 builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
@@ -138,16 +163,20 @@ if (app.Environment.IsDevelopment())
 // HTTPS
 app.UseHttpsRedirection();
 
-// CORS
+// CORS (Sempre antes do Authentication, Authorization e MapHub)
 app.UseCors("DefaultPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Controllers
+// Controllers e Middlewares
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<LogMiddleware>();
+
 app.MapControllers();
 
+// 2. ADICIONADO: Mapear o endpoint de conexão do SignalR
+// Qualquer requisição para "/loghub" vai cair no Hub de Logs
+app.MapHub<LogHub>("/loghub");
 
 app.Run();
