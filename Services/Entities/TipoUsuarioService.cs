@@ -38,6 +38,11 @@ namespace f_backend_gestafe.Services.Entities
                 {
                     errors.Add("O campo 'Nome' deve ter no máximo 100 caracteres.");
                 }
+
+                if (!Enum.IsDefined(entityDTO.NivelAcesso))
+                {
+                    errors.Add("O campo 'NivelAcesso' possui um valor inválido.");
+                }
             }
 
             if (errors.Any())
