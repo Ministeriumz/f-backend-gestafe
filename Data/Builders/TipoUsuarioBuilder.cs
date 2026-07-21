@@ -13,6 +13,8 @@ namespace f_backend_gestafe.Data.Builders
             modelBuilder.Entity<TipoUsuario>().Property(t => t.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
+            modelBuilder.Entity<TipoUsuario>().Property(t => t.NivelAcesso)
+                .IsRequired();
         }
     }
 }

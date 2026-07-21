@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using f_backend_gestafe.Objects.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace f_backend_gestafe.Objects.Models
@@ -15,6 +16,10 @@ namespace f_backend_gestafe.Objects.Models
         [Column("nome")]
         [MaxLength(100)]
         public string Nome { get; set; }
+
+        [Required]
+        [Column("nivel_acesso")]
+        public NivelAcesso NivelAcesso { get; set; }
 
         public ICollection<Usuario> Usuarios { get; set; }
     }
