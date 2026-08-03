@@ -1,10 +1,11 @@
+using f_backend_gestafe.Configurations;
 using f_backend_gestafe.Data;
 using f_backend_gestafe.Data.Interfaces;
 using f_backend_gestafe.Data.Repositories;
+using f_backend_gestafe.Hubs; // <-- IMPORTANTE: Namespace onde você vai criar a classe LogHub
 using f_backend_gestafe.Middleware;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
-using f_backend_gestafe.Hubs; // <-- IMPORTANTE: Namespace onde você vai criar a classe LogHub
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -145,6 +146,13 @@ builder.Services.AddScoped<ICargosUsuarioService, CargosUsuarioService>();
 
 builder.Services.AddScoped<IEscalaRepository, EscalaRepository>();
 builder.Services.AddScoped<IEscalaService, EscalaService>();
+
+// Carrega as configurações do WhatsAppSettings
+builder.Services.Configure<WhatsAppSettings>(
+    builder.Configuration.GetSection("WhatsAppService"));
+
+// Registra o Typed HttpClient com ciclo de vida gerenciado
+builder.Services.AddHttpClient<IWhatsAppIntegrationService, WhatsAppIntegrationService>();
 
 // Build app
 var app = builder.Build();
