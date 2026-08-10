@@ -157,6 +157,17 @@ builder.Services.AddHttpClient<IWhatsAppIntegrationService, WhatsAppIntegrationS
 // Build app
 var app = builder.Build();
 
+// Aplica as migrations e popula os dados iniciais somente quando o banco está vazio.
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+    await DatabaseSeeder.SeedIfEmptyAsync(
+        dbContext,
+        app.Configuration,
+        app.Logger);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
