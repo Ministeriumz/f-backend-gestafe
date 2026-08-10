@@ -6,17 +6,61 @@ using f_backend_gestafe.Hubs; // <-- IMPORTANTE: Namespace onde você vai criar 
 using f_backend_gestafe.Middleware;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
+using f_backend_gestafe.Services.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("login", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+
+    options.AddPolicy("password-reset", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        var retryAfterSeconds = context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter)
+            ? Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds))
+            : 60;
+
+        context.HttpContext.Response.Headers.RetryAfter = retryAfterSeconds.ToString();
+        await context.HttpContext.Response.WriteAsJsonAsync(new
+        {
+            code = StatusCodes.Status429TooManyRequests,
+            message = $"Muitas tentativas. Aguarde {retryAfterSeconds} segundos e tente novamente.",
+            data = (object?)null
+        }, cancellationToken);
+    };
+});
 
 // 1. ADICIONADO: Registrar os serviços do SignalR no container
 builder.Services.AddSignalR();
@@ -128,6 +172,7 @@ builder.Services.AddScoped<ITipoUsuarioService, TipoUsuarioService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IPasswordResetTokenService, PasswordResetTokenService>();
 
 builder.Services.AddScoped<IConfiguracoesRepository, ConfiguracoesRepository>();
 builder.Services.AddScoped<IConfiguracoesService, ConfiguracoesService>();
@@ -150,6 +195,8 @@ builder.Services.AddScoped<IEscalaService, EscalaService>();
 // Carrega as configurações do WhatsAppSettings
 builder.Services.Configure<WhatsAppSettings>(
     builder.Configuration.GetSection("WhatsAppService"));
+builder.Services.Configure<PasswordResetSettings>(
+    builder.Configuration.GetSection("PasswordReset"));
 
 // Registra o Typed HttpClient com ciclo de vida gerenciado
 builder.Services.AddHttpClient<IWhatsAppIntegrationService, WhatsAppIntegrationService>();
@@ -185,6 +232,7 @@ app.UseHttpsRedirection();
 // CORS (Sempre antes do Authentication, Authorization e MapHub)
 app.UseCors("DefaultPolicy");
 
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
