@@ -4,6 +4,7 @@ using f_backend_gestafe.Middleware.Exceptions;
 using f_backend_gestafe.Objects.Dtos.Entities;
 using f_backend_gestafe.Objects.Models;
 using f_backend_gestafe.Services.Interfaces;
+using System.Text.Json;
 
 namespace f_backend_gestafe.Services.Entities
 {
@@ -11,17 +12,20 @@ namespace f_backend_gestafe.Services.Entities
     {
         private readonly IEscalaRepository _escalaRepository;
         private readonly ICargosRepository _cargosRepository;
+        private readonly IIgrejaRepository _igrejaRepository;
         private readonly ICargosUsuarioRepository _cargosUsuarioRepository;
         private readonly IMapper _mapper;
 
         public EscalaService(
             IEscalaRepository escalaRepository,
             ICargosRepository cargosRepository,
+            IIgrejaRepository igrejaRepository,
             ICargosUsuarioRepository cargosUsuarioRepository,
             IMapper mapper) : base(escalaRepository, mapper)
         {
             _escalaRepository = escalaRepository;
             _cargosRepository = cargosRepository;
+            _igrejaRepository = igrejaRepository;
             _cargosUsuarioRepository = cargosUsuarioRepository;
             _mapper = mapper;
         }
@@ -37,33 +41,39 @@ namespace f_backend_gestafe.Services.Entities
             else
             {
                 // Validação do campo Data
-                if (entityDTO.Data == default)
+                if (entityDTO.DataSalvamento == default)
                 {
-                    errors.Add("O campo 'Data' é obrigatório e deve ser uma data válida.");
+                    errors.Add("O campo 'DataSalvamento' é obrigatório e deve ser uma data válida.");
                 }
 
                 // Validação de coerência das Horas
-                if (entityDTO.HoraInicio == default && entityDTO.HoraFim == default)
+                if (entityDTO.HoraSalvamento < TimeOnly.FromDateTime(DateTime.Today))
                 {
                     // Dependendo do seu sistema, 00:00 pode ser válido. Se for, remova esta checagem específica de default.
-                    errors.Add("Os campos 'HoraInicio' e 'HoraFim' devem ser informados.");
+                    errors.Add("O campo 'HoraSalvamento' deve conter uma data válida.");
                 }
-                else if (entityDTO.HoraInicio >= entityDTO.HoraFim)
+
+                // Validação do campo JSON
+                if (string.IsNullOrWhiteSpace(entityDTO.EscalaJson))
                 {
-                    errors.Add("A 'HoraInicio' não pode ser maior ou igual à 'HoraFim'.");
+                    errors.Add("O campo 'EscalaJson' é obrigatório.");
+                }
+                else if (!IsValidJson(entityDTO.EscalaJson))
+                {
+                    errors.Add("O formato do 'EscalaJson' é inválido. Certifique-se de enviar uma estrutura JSON válida.");
                 }
 
                 // Validação e verificação de existência do Cargo
-                if (entityDTO.CargoId <= 0)
+                if (entityDTO.IgrejaId <= 0)
                 {
-                    errors.Add("O campo 'CargoId' é obrigatório e deve ser um ID válido maior que zero.");
+                    errors.Add("O campo 'igrejaid' é obrigatório e deve ser um ID válido maior que zero.");
                 }
                 else
                 {
-                    var cargoExiste = await _cargosRepository.GetById(entityDTO.CargoId);
-                    if (cargoExiste is null)
+                    var igrejaExiste = await _igrejaRepository.GetById(entityDTO.IgrejaId);
+                    if (igrejaExiste is null)
                     {
-                        errors.Add("O Cargo informado não está cadastrado no banco de dados.");
+                        errors.Add("A igreja informada não está cadastrado no banco de dados.");
                     }
                 }
             }
@@ -75,6 +85,21 @@ namespace f_backend_gestafe.Services.Entities
 
             var entity = _mapper.Map<Escala>(entityDTO);
             await _escalaRepository.Add(entity);
+        }
+
+        private bool IsValidJson(string json)
+        {
+            try
+            {
+                using (JsonDocument.Parse(json))
+                {
+                    return true;
+                }
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
         }
 
         public async Task<List<ResponseEscalaDiaDTO>> GerarEscalaAleatoriaAsync(RequestEscalaDTO request)
