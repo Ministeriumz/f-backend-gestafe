@@ -44,5 +44,6 @@ namespace f_backend_gestafe.Objects.Models
         public ICollection<Usuario> Usuarios { get; set; }
         public Configuracoes Configuracoes { get; set; }
         public ICollection<Financeiro> Financeiros { get; set; }
+        public ICollection<Escala> Escalas { get; set; }
     }
 }

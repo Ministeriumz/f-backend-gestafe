@@ -5,5 +5,6 @@ namespace f_backend_gestafe.Services.Interfaces
 {
     public interface IEscalaService : IGenericService<Escala, EscalaDTO>
     {
+        Task<List<ResponseEscalaDiaDTO>> GerarEscalaAleatoriaAsync(RequestEscalaDTO request);
     }
 }

@@ -7,6 +7,6 @@ namespace f_backend_gestafe.Data.Interfaces
         Task<CargosUsuario> GetByCompositeId(int usuarioId, int cargoId);
         Task RemoveComposite(int usuarioId, int cargoId);
         Task<CargosUsuario> GetByUsuarioECargoAsync(int idUsuario, int idCargo);
-
+        Task<List<CargosUsuario>> ObterTodosComRelacionamentosAsync();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace f_backend_gestafe.Objects.Models
 {
@@ -12,20 +13,24 @@ namespace f_backend_gestafe.Objects.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("data")]
-        public DateOnly Data { get; set; }
+        [Column("igreja_id")]
+        public int IgrejaId { get; set; }
 
         [Required]
-        [Column("hora_inicio")]
-        public TimeOnly HoraInicio { get; set; }
+        [Column("data_salvamento")]
+        public DateOnly DataSalvamento { get; set; }
 
         [Required]
-        [Column("hora_fim")]
-        public TimeOnly HoraFim { get; set; }
+        [Column("hora_salvamento")]
+        public TimeOnly HoraSalvamento { get; set; }
 
-        [ForeignKey("CargoId")]
-        public int CargoId { get; set; }
-        public Cargo Cargo { get; set; }
+        [Required]
+        [Column("escala_json", TypeName = "jsonb")]
+        public string EscalaJson { get; set; }
+
+        [ForeignKey(nameof(IgrejaId))]
+        public Igreja Igreja { get; set; } = null;
+
 
     }
 }
