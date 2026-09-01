@@ -11,6 +11,9 @@ namespace f_backend_gestafe.Data.Builders
             modelBuilder.Entity<Escala>().Property(e => e.Data).IsRequired();
             modelBuilder.Entity<Escala>().Property(e => e.HoraInicio).IsRequired();
             modelBuilder.Entity<Escala>().Property(e => e.HoraFim).IsRequired();
+            modelBuilder.Entity<Escala>().Property(e => e.CargoId)
+                .HasColumnName("id_cargo")
+                .IsRequired();
         }
     }
 }

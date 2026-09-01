@@ -85,7 +85,8 @@ namespace f_backend_gestafe.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CargoId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id_cargo");
 
                     b.Property<DateOnly>("Data")
                         .HasColumnType("date")

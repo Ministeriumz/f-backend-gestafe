@@ -7,6 +7,8 @@ using f_backend_gestafe.Middleware;
 using f_backend_gestafe.Services.Entities;
 using f_backend_gestafe.Services.Interfaces;
 using f_backend_gestafe.Services.Security;
+using f_backend_gestafe.Services.Authorization;
+using f_backend_gestafe.Objects.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
@@ -145,8 +147,11 @@ builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
+        .AddRequirements(new AccessLevelRequirement((int)NivelAcesso.SuperAdministrador))
         .Build();
 });
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, AccessLevelPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, AccessLevelAuthorizationHandler>();
 
 // Mantivemos sua política com suporte a credenciais e as portas de Dev
 builder.Services.AddCors(o => o.AddPolicy("DefaultPolicy", policy =>

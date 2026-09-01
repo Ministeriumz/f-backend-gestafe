@@ -24,6 +24,7 @@ namespace f_backend_gestafe.Objects.Models
         public TimeOnly HoraFim { get; set; }
 
         [ForeignKey("CargoId")]
+        [Column("id_cargo")]
         public int CargoId { get; set; }
         public Cargo Cargo { get; set; }
 
