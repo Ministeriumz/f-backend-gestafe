@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using f_backend_gestafe.Services.Security;
+using f_backend_gestafe.Objects.Authorization;
 
 namespace f_backend_gestafe.Controllers
 {
@@ -280,6 +281,8 @@ namespace f_backend_gestafe.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(AuthorizationClaimTypes.UserTypeId, usuario.IdTipoUsuario.ToString()),
+                new Claim(AuthorizationClaimTypes.AccessLevel, ((int)usuario.TipoUsuario.NivelAcesso).ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

@@ -16,7 +16,9 @@ namespace f_backend_gestafe.Data.Repositories
         public async Task<Usuario?> GetByEmail(string email)
         {
             var normalizedEmail = email.Trim().ToLower();
-            return await _context.Usuario.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+            return await _context.Usuario
+                .Include(u => u.TipoUsuario)
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
         }
     }
 }

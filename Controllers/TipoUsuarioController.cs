@@ -94,6 +94,7 @@ namespace f_backend_gestafe.Controllers
 
             // Atualiza apenas os campos que vierem
             existingTipoUsuario.Nome = tipoUsuarioDTO.Nome ?? existingTipoUsuario.Nome;
+            existingTipoUsuario.NivelAcesso = tipoUsuarioDTO.NivelAcesso ?? existingTipoUsuario.NivelAcesso;
 
             await _tipoUsuarioService.Update(existingTipoUsuario, id);
 

@@ -23,7 +23,7 @@ public static class DatabaseSeeder
 
         var tiposUsuario = new[]
         {
-            new TipoUsuario { Nome = "Administrador", NivelAcesso = NivelAcesso.Administrador },
+            new TipoUsuario { Nome = "Superadministrador", NivelAcesso = NivelAcesso.SuperAdministrador },
             new TipoUsuario { Nome = "Administrador da Igreja", NivelAcesso = NivelAcesso.AdmIgreja },
             new TipoUsuario { Nome = "Colaborador da Igreja", NivelAcesso = NivelAcesso.ColaboradorIgreja },
             new TipoUsuario { Nome = "Usuário", NivelAcesso = NivelAcesso.Usuario }
@@ -48,7 +48,7 @@ public static class DatabaseSeeder
             Senha = PasswordHasher.Hash(
                 configuration["DatabaseSeed:RootUser:Password"] ?? "Root@123"),
             Igreja = igreja,
-            TipoUsuario = tiposUsuario.Single(tipo => tipo.NivelAcesso == NivelAcesso.Administrador)
+            TipoUsuario = tiposUsuario.Single(tipo => tipo.NivelAcesso == NivelAcesso.SuperAdministrador)
         };
 
         var configuracoes = new Configuracoes
