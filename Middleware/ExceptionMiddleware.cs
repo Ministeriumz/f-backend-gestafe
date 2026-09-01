@@ -57,7 +57,9 @@ public class ExceptionMiddleware
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    Message = "Erro interno do servidor."
+                    Message = ex.Message,
+                    InnerException = ex.InnerException?.Message,
+                    StackTrace = ex.StackTrace
                 });
                 break;
         }

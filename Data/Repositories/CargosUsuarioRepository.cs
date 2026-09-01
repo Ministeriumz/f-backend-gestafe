@@ -34,5 +34,14 @@ namespace f_backend_gestafe.Data.Repositories
             return await _context.Set<CargosUsuario>()
                 .FirstOrDefaultAsync(cu => cu.IdUsuario == idUsuario && cu.IdCargo == idCargo);
         }
+
+        public async Task<List<CargosUsuario>> ObterTodosComRelacionamentosAsync()
+        {
+            // Apenas busca os dados, sem regras de negócio
+            return await _context.CargosUsuarios
+                .Include(cu => cu.Usuario)
+                .Include(cu => cu.Cargo)
+                .ToListAsync();
+        }
     }
 }

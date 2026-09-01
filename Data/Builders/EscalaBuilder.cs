@@ -7,13 +7,27 @@ namespace f_backend_gestafe.Data.Builders
     {
         public static void Build(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Escala>().HasKey(e => e.Id);
-            modelBuilder.Entity<Escala>().Property(e => e.Data).IsRequired();
-            modelBuilder.Entity<Escala>().Property(e => e.HoraInicio).IsRequired();
-            modelBuilder.Entity<Escala>().Property(e => e.HoraFim).IsRequired();
-            modelBuilder.Entity<Escala>().Property(e => e.CargoId)
-                .HasColumnName("id_cargo")
-                .IsRequired();
+            modelBuilder.Entity<Escala>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.IgrejaId)
+                    .IsRequired();
+
+                entity.Property(e => e.DataSalvamento)
+                    .IsRequired();
+
+                entity.Property(e => e.HoraSalvamento)
+                    .IsRequired();
+
+                entity.Property(e => e.EscalaJson)
+                    .IsRequired().HasColumnName("configuracoes").HasColumnType("jsonb"); ;
+
+                entity.HasOne(e => e.Igreja)
+                    .WithMany()
+                    .HasForeignKey(e => e.IgrejaId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

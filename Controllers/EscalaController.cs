@@ -51,6 +51,40 @@ namespace f_backend_gestafe.Controllers
             return Ok(_response);
         }
 
+        // Gerar Escala
+        [HttpGet("gerar")]
+        public async Task<IActionResult> GerarEscala([FromQuery] RequestEscalaDTO request)
+        {
+            try
+            {
+                // A Controller delega todo o trabalho pesado para a Service
+                var resultado = await _escalaService.GerarEscalaAleatoriaAsync(request);
+
+                return Ok(resultado);
+            }
+            catch (ArgumentException ex)
+            {
+                // Erro de validação de data (ex: Início > Fim)
+                return BadRequest(new { mensagem = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Erro de regra de negócio (ex: sem usuários no banco)
+                return NotFound(new { mensagem = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // O ex.StackTrace vai te mostrar o caminho completo até a linha que quebrou
+                return StatusCode(500, new
+                {
+                    mensagem = "Ocorreu um erro interno ao gerar a escala.",
+                    detalhe = ex.Message,
+                    linhaDoErro = ex.StackTrace
+                });
+            }
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Post(EscalaDTO escalaDTO)
         {
